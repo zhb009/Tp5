@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>登录页面</title>
+		{include file="index/include" /}
+		<link rel="stylesheet" type="text/css" href="./plugins/Font-Awesome-3.2.1/css/font-awesome.min.css" />
+		
+		<style type="text/css">
+			body{
+				margin:0;
+				padding:0;
+			}
+			
+			#loginbox{
+				width:500px;
+				height:350px;
+				position: absolute;
+			}
+			
+			.title{
+				text-align:center;
+			}
+			.content{
+				width:500px;
+				height:320px;
+				box-shadow: 5px 5px 5px #999999;
+			}
+			.td1{
+				width:150px;
+				height:60px;
+				line-height:60px;
+				text-align:right;
+				font-size:20px;
+				vertical-align:middle;
+			}
+			.td2{
+				width:350px;
+				height:60px;
+				line-height:60px;
+				vertical-align:middle;
+			}
+			
+			.td2 > input{
+				width:230px;
+				height:22px;
+				line-height:20px;
+				font-size:20px;
+			}
+			
+			.td3{
+				width:200px;
+				height:50px;
+				text-align:right;
+				vertical-align:bottom;
+			}
+			
+			.td3 > input{
+				width:80px;
+				height:30px;
+			}
+			
+			.td4{
+				width:100px;
+				height:50px;
+				vertical-align:bottom;
+			}
+			.td5{
+				width:150px;
+				height:50px;
+				vertical-align:bottom;
+			}
+			
+			.td5 > input{
+				width:80px;
+				height:30px;
+			}
+			
+			.prompt{
+			    color:red;
+			    margin-left:10px;
+			}
+			
+			.text1{
+			    width:100px;
+			    height:22px;
+			}
+			
+			#loginboxhead{
+				width:100%;
+				height:30px;
+				line-height:30px;
+				background-color: blue;
+				text-align: left;
+				color:#FFFFFF;
+			}
+		</style>
+		
+	</head>
+	<body>
+		{include file="index/header" /}
+		
+		<div id="loginbox">
+			<div id="loginboxhead">&nbsp;&nbsp;<span class="icon-desktop icon-large"></span></div>
+            <div class="content">
+            	<br />
+            	<div id="login_user" style="padding-left: 50px; display: none;"></div>
+                
+            	<form id="formlogin" method="post" onSubmit="return confirmInput();">
+                	<table>
+                    	<tr>
+                            <td class="td1">用户名：</td>
+                            <td class="td2"><input id="username" name="username" type="text" size="30" /></td>
+                       </tr>
+                        <tr>
+                            <td class="td1">密&nbsp;&nbsp;码：</td>
+                            <td class="td2"><input id="password" name="password" type="password" size="30" /></td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="td1">验证码：</td>
+                            <td><input id="checkcode" class="text1" type="text" name="checkcode"></td>
+                            <td><a href="javascript:void(0);" onclick="changecode();">
+                                    <img src="__PUBLIC__/checkcode/checkcode.php" id="codeImg" width="100px" height="30px" style="border:1px solid #cccccc; vertical-align:middle;" alt="验证码图片，点我换新图" />
+                                </a>
+                            </td>
+                            <td><span class="prompt">点击图片刷新！</span></td>
+                        </tr>
+                    </table>
+                    <table>
+                    	<tr>
+                            <td class="td3"><input type="submit" value="登  录"/></td>
+                            <td class="td4">&nbsp;</td>
+                            <td class="td5"><input type="reset" value="重  置" /></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+		
+		<script type="text/javascript" language="javascript">
+        	//字符串为空
+            function isNull(str) {
+                if (str == null || str == "" || str.length < 1)
+                    return true;
+                else
+                    return false;
+            }
+            
+        	//生成随机参数
+            function getRand() {
+                var mydate = new Date();
+                var rnd = Math.floor(Math.random() * 9999) + 1;
+                var result = mydate.getHours().toString() + mydate.getMinutes().toString() + mydate.getSeconds().toString() + rnd;
+                return result;
+            }
+            
+            function changecode(){ // 更换验证码
+                $('#codeImg').attr("src","__PUBLIC__/checkcode/checkcode.php" + "?rnd=" + getRand());
+            }
+            
+             //在客户端验证用户输入合法性
+            function confirmInput()
+            {
+                if(formlogin.username.value == ''){
+                    alert('请填写您的用户名!');
+                    $('#username').focus();
+                    return false;
+                }
+                
+                if(formlogin.password.value == ''){
+                    alert('请填写您的密码!');
+                    $('#password').focus();
+                    return false;
+                }
+                
+                if(formlogin.checkcode.value == ""){
+                    alert('请您填写验证码!');
+                    $('#checkcode').focus();
+                    return false;
+                }
+                
+                if($.cookie('checkcode').toLowerCase() != $("#checkcode").val().toLowerCase()){  // 将验证码转换成小写后再比较
+                    alert('验证码输入错误！');
+                    return false;
+                }
+                
+                $.ajax({
+                    url: "?s=/index/Index/login_submit_ajax",
+                    type: 'POST',
+                    datatype:'text',
+                    data:{
+                        username:formlogin.username.value,
+                        password:formlogin.password.value
+                    },
+                    success: function(data){
+ 						if(data == -111){
+ 							document.getElementById('login_user').style.display = 'block';
+ 							document.getElementById('login_user').innerHTML = '<span class="icon-user icon-large" style="color:red;">&nbsp;&nbsp;用户名或密码错误！</span>';
+ 						} else if(data == 111){
+ 							top.location="?s=/index/Index/index";
+		                    self.location="?s=/index/Index/index"; 
+		                    window.location.href="?s=/index/Index/index";
+		                    window.navigate("?s=/index/Index/index"); 
+ 						}
+                    }
+                });
+                
+                return false;
+            }
+            
+            window.onload = function(event){
+            	
+            	var event = window.event || event;
+            		
+        		var loginboxObj = document.getElementById('loginbox');
+        		
+        		var posX = document.body.offsetWidth / 2 - loginboxObj.offsetWidth / 2;
+        		
+        		loginboxObj.style.left = posX + 'px';
+        		loginboxObj.style.top = '200px';
+            	
+            	document.getElementById('loginboxhead').onmousedown = function(event){
+            		var event = window.event || event;
+            		
+	        		var loginboxObj = document.getElementById('loginbox');
+	        		
+	        		var top = loginboxObj.offsetTop;
+					var left = loginboxObj.offsetLeft;
+	        		
+	        		var elementX = parseInt(event.clientX - left);
+					var elementY = parseInt(event.clientY - top);
+					
+	            	document.onmousemove = function(event){
+	            		var event = window.event || event;
+			
+						var X = parseInt(event.clientX - elementX);
+						var Y = parseInt(event.clientY - elementY);
+						
+						var winW = document.documentElement.clientWidth || document.body.clientWidth;
+						var winH = document.documentElement.clientHeight || document.body.clientHeight;
+						
+						var maxW = winW - loginboxObj.offsetWidth;
+						var maxH = winH - loginboxObj.offsetHeight;
+						
+						if (X < 0){
+							X = 0;
+						} else if(X > maxW){
+							X = maxW;
+						}
+						
+						if (Y < 0){
+							Y = 0
+						} else if(Y > maxH){
+							Y = maxH;
+						}
+	            		
+	            		loginboxObj.style.left = X + 'px';
+	            		loginboxObj.style.top = Y + 'px';
+	            	}
+	            }
+            	
+            	document.getElementById('loginboxhead').onmouseup = function(event){
+            		document.onmousemove = null;
+            	}
+            	
+            	$('#loginboxhead').tooltip({
+	                position: 'top',
+	                content: '<span style="color:#fff">拖动可以移动</span>',
+	                onShow: function(){
+	                    $(this).tooltip('tip').css({
+	                        backgroundColor: '#666',
+	                        borderColor: '#666'
+	                    });
+	                }
+	            });
+	            
+	            if(!isNull($.cookie('pageusername'))) {
+					document.getElementById('login_user').style.display = 'block';
+					document.getElementById('login_user').innerHTML = '<span class="icon-user icon-large" style="color:green;">&nbsp;&nbsp;用户' + $.cookie('pageusername') + '已登录。</span>';
+				}
+            }
+       </script>
+		
+	</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>选项卡</title>
+    {include file="index/include" /}
+    <link rel="stylesheet" type="text/css" href="./plugins/Font-Awesome-3.2.1/css/font-awesome.min.css" />
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    {include file="index/header" /}
+
+    <div id="tabs" class="easyui-tabs" style="width:auto;height:auto;">
+        <div title="登录设置" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="常规设置" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="加密卡设置" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="端点安全设置" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="端口设置" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="资源管理" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="资源负载均衡管理" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+        <div title="资源组管理" style="padding:10px;" data-options="tabWidth:120">
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.easyui-tabs').tabs({
+            "selected": 6
+        });
+
+        $("#tabs").tabs({
+            onSelect: function(title, index) {
+                if (index == 5) {
+                    top.location = "?s=/index/Tabs/tabs1&tab=loadbalance";
+                    self.location = "?s=/index/Tabs/tabs1&tab=loadbalance";
+                    window.location.href = "?s=/index/Tabs/tabs1&tab=loadbalance";
+                    window.navigate("?s=/index/Tabs/tabs1&tab=loadbalance");
+                }
+                if (index == 6) {
+                    top.location = "?s=/index/Tabs/tabs1&tab=gres";
+                    self.location = "?s=/index/Tabs/tabs1&tab=gres";
+                    window.location.href = "?s=/index/Tabs/tabs1&tab=gres";
+                    window.navigate("?s=/index/Tabs/tabs1&tab=gres");
+                }
+                if (index == 7) {
+                    top.location = "?s=/index/Tabs/tabs1&tab=Icon";
+                    self.location = "?s=/index/Tabs/tabs1&tab=Icon";
+                    window.location.href = "?s=/index/Tabs/tabs1&tab=Icon";
+                    window.navigate("?s=/index/Tabs/tabs1&tab=Icon");
+                }
+            }
+        });
+    });
+</script>

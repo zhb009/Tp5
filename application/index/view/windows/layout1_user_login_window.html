@@ -1,0 +1,35 @@
+<div id="user_prompt" style="margin:30px 50px;width:300px;height:35px;background-color:#CCFFCC;">此页面不登录就无法根据用户名获取数据，可以用testUser登录！</div>
+<div style="margin:30px 50px;">
+    <input id="username" class="easyui-textbox" style="width:300px;height:35px;padding:12px" data-options="prompt:'Username',value:'testUser',iconCls:'icon-man',iconWidth:38">
+</div>
+<div style="margin:30px 50px;">
+    <input id="password" class="easyui-passwordbox" style="width:300px;height:35px;padding:12px" data-options="prompt:'Password',value:'123456',iconCls:'icon-lock',iconWidth:38">
+</div>
+<div style="margin:30px 50px;">
+    <a id="userLogin" href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="padding:5px 0px;width:300px;">
+        &nbsp;<span style="font-size:12px;">登&nbsp录</span>
+    </a>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		document.getElementById('userLogin').onclick = function(){
+			$.post(
+				'?s=/index/Index/login_submit_ajax',
+				{
+					username:$("#username").textbox('getValue'),
+					password:$("#password").textbox('getValue')
+				},
+				function(data){
+					if(data == -111){
+						document.getElementById('user_prompt').innerHTML='用户名或是密码错误！';
+						document.getElementById('user_prompt').style.backgroundColor = 'red';
+					} else if(data == 111){
+	                    window.location.reload();
+					}
+				},
+				'text'
+			);
+		}
+	});
+</script>

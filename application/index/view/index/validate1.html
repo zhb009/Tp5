@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>正则表达式表单验证</title>
+    {include file="index/include" /}
+    <link rel="stylesheet" type="text/css" href="./plugins/Font-Awesome-3.2.1/css/font-awesome.min.css" />
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    {include file="index/header" /}
+    <div style="width:600px;margin:50px auto;">
+        <table>
+            <tr>
+                <td>电话号码：&nbsp;</td>
+                <td><input style="width:200px;" class="easyui-validatebox" data-options="required:true,validType:'phone'" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>手机号码：&nbsp;</td>
+                <td><input style="width:200px;" class="easyui-validatebox" data-options="required:true,validType:'mobile'" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>整数或小数：&nbsp;</td>
+                <td><input style="width:200px;" class="easyui-validatebox" data-options="required:true,validType:'intOrFloat'" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>整&nbsp;&nbsp;数：&nbsp;</td>
+                <td><input style="width:200px;" class="easyui-validatebox" data-options="required:true,validType:'integer'" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>不能全部为数字：&nbsp;</td>
+                <td><input style="width:200px;" class="easyui-validatebox" data-options="required:true,validType:'notInt'" /></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+    });
+</script>

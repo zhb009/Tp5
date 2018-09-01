@@ -1,0 +1,74 @@
+<style type="text/css">
+	.td1{
+		padding:20px 10px 0 10px;
+	}
+	.td2{
+		padding:20px 10px 0 10px;
+	}
+</style>
+
+<div style="width:330px;margin:0 auto;">
+	<form id="user_group_form" name="group_form" action="" method="post">
+		<div>
+			<table>
+				<tr>
+					<td class="td1">用户组名</td>
+					<td class="td2">
+						<input type="text" class="easyui-textbox" id="group_name" name="group_name" style="width:220px;" data-options="required:true"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="td1">所属父组</td>
+					<td class="td2">
+						<select class="easyui-combobox" id="group_group" name="group_group" style="width:220px;"></select>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style="margin:30px auto;width:230px;">
+            <input type="button" class="easyui-linkbutton" style="width:80px;margin-right:60px;" value="确 定"  id="addUserGroup" onClick="submit_check();"/>
+            <input type="button" class="easyui-linkbutton" style="width:80px;" value="取 消" onClick="closeWindow('userGroup_div');">
+        </div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#group_group').combobox({
+       		url:'?s=/index/Layout/groupJsonDataText',
+					valueField:'value', 
+					textField:'text',
+					editable: false
+		});
+	});
+	
+	function submit_check(){
+		if($('#group_name').textbox('getValue') == ''){
+			alert('用户组名不能为空!');
+            $('#group_name').next('span').find('input').focus();
+            return false;
+		}
+		
+		if($("#group_group").combobox('getValue') == ''){
+			alert('请选择所属父组!');
+            return false;
+		}
+		
+		$.post(
+	  		"?s=/index/Layout/groupAdd_ajax",
+	  		{
+	  			"group_name": $("#group_name").textbox('getValue'),
+	  			"group_group": $("#group_group").combobox('getValue')
+	  		},
+	  		function(data){
+	  			if(data == 0){
+	  				$('#tt1').tree('reload');
+	  				closeWindow('userGroup_div');
+	  			} else if(data == -11){
+	  				alert('树节点' + $("#group_name").textbox('getValue') + '已经存在。');
+	  			}
+	  		},
+	  		"json"
+	  	);
+	}
+</script>

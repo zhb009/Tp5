@@ -1,0 +1,327 @@
+<style type="text/css">
+	ul, ol, li {
+	   font-size: 100%;
+	   margin: 0;
+	   outline: 0 none;
+	   padding: 0;
+	   list-style-type: none;
+	}
+
+    .user_add_box table tbody tr td input[type] {
+        border: 1px solid #bbbbbb;
+        padding-left: 3px;
+        width:150px;
+        height:20px;
+    }
+
+    .TRbasic {
+        font-family: "宋体","sans-serif";
+        font-size: 12px;
+    }
+
+    .user_footer_btn{
+        background-color: #E6E6E6;
+        padding-bottom: 5px;
+        padding-right: 10px;
+        padding-top: 10px;
+        text-align: right;
+    }
+
+    .user_button_middle{
+        font-size: 12px;
+        border: 0;
+        margin: 0 0 2px 5px;
+        height: 28px;
+        width: 90px;
+        font-style: normal;
+        cursor: pointer;
+        background-color: #f5f5f5;
+    }
+    .user_button_middle:hover{
+        background-color: #ebeced;
+    }
+    #confirmable{
+        background-color: #2984a4!important;
+        color: #fff;
+    }
+    #confirmable:hover{
+        color:#fff;
+        background-color: #24748f!important;
+        -webkit-filter: none;
+        -o-filter: none;
+        filter: none;
+    }
+    .user_add_box table tbody tr td{
+        padding:5px 20px;
+    }
+    #HA_shuxing{
+        width: 20px;
+        height: 20px;
+    }
+    .window-header{
+        width:700px!important;
+    }
+    #dir_button{
+        width: 30px!important;
+        height: 25px!important;
+    }
+    #cancel_button{
+        width: 30px!important;
+        height: 25px!important;
+    }
+    .panel-tool{
+        padding-right: 10px!important;
+    }
+    .buttonHwid {
+        background: rgba(0, 0, 0, 0) -moz-linear-gradient(center top , #2984a4 0px, #24748f 100%) repeat scroll 0 0;
+        border: 1px solid #1f637b;
+        color: #fff;
+    }
+</style>
+
+
+<div class="user_add_box">
+    <div class="left_button_setting" style="width:10%;float:left;background-color: #f2f2f2;">
+        <ul style="width:100%">
+            <li style="padding:4px 0px;background:#c01c25;color:#fff;border-bottom:1px solid #d1d1d1;text-align:center;" id="basic_info_button">基本信息</li>
+            <li style="padding:4px 0px;background:#f2f2f2;color:#1c1c1c;border-bottom:1px solid #d1d1d1;text-align:center;" id="advaced_info_button">高级信息</li>
+        </ul>
+    </div>
+    <div class="right_button_content" style="width:90%;float:left;background-color: #fff;">
+        <div id="basic_information_box" style="padding:10px 0;">
+            <table style="width:100%" class="ngtos_form_table">                       
+                <tbody>
+                    <tr>
+                        <td>名称</td>
+                        <td style="width:70%"><input id="user_name" type="text"  name="user_name" maxlength="255" onblur="userExist(this);"/>&nbsp;<span id="user_exist">&nbsp;必填</span></td>
+                    </tr>
+                    <tr>
+                        <td>所属父组</td>
+                        <td>
+                            <select style="width:150px;height:25px;" name="user_group" id="user_group"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>口令</td>
+                        <td><input id="user_passwd" type="password" name="user_passwd" />&nbsp;<font color="red">*</font>
+                            [受口令策略限制]
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>确认口令</td>
+                        <td><input id="user_passwd_confirm" type="password" name="user_passwd_confirm" />&nbsp;<font color="red">*</font></td>
+                    </tr>
+                    <tr>
+                        <td>描述</td>
+                        <td>
+                            <input id="user_description" type="text" value="" name="user_description">
+                        </td>
+                    </tr>
+                </tbody>                                
+            </table>   
+        </div>
+
+        <div id="advanced_information_box" style="padding:10px 0;display:none"> 
+            <table style="width:100%" class="ngtos_form_table">
+                <tr>
+                    <td>账号邮箱</td>
+                    <td>
+                        <input id="user_mail" type="text" name="user_mail" maclength="61">
+                    </td>
+                </tr>
+                <tr>
+                    <td>账号手机号码</td>
+                    <td>
+                        <input id="user_phone" type="text" name="user_phone">
+                    </td>
+                </tr>
+                <tr>
+                    <td>硬件特征码</td>
+                    <td>
+                        <input type="text" style="width:200px" id="user_hwid_tex" name="user_hwid_tex"/>
+                        <input type="button" value="->" style="width:20px;" id="dir_button" name="srcInsBut" onclick="list_add('user_hwid_tex', 'user_hwid_list');" class="buttonHwid" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <select type="text" name="user_hwid_list" style="width:200px;height:134px;" size="8" id="user_hwid_list" multiple="multiple"></select>&nbsp;
+                        <input type="button" value="X" style="width:20px;vertical-align:top;" id="cancel_button" name="srcDelBut" onclick="list_del('user_hwid_list');" class="buttonHwid" />
+                        <input id="user_hwid_list2" name="user_hwid_list2" type="hidden" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>SV客户端IP地址</td>
+                    <td>
+                        <input id="user_ip" type="text" name="user_ip">
+                    </td>
+                </tr>      
+            </table>
+        </div>
+    </div>
+</div>
+    <div class="user_footer_btn">
+        <input type="button" value="确 定" class="user_button_middle confirmable" style="margin-top:8px;" onclick="submit_check();"/>
+        <input type="button" value="取 消" class="user_button_middle" onClick="javascript:closeWindow('user_add');">
+    </div>       
+
+<script type="text/javascript">
+    var basic_information_box = document.getElementById("basic_information_box");
+    var advanced_information_box = document.getElementById("advanced_information_box");
+    var basic_info_button = document.getElementById("basic_info_button");
+    var advaced_info_button = document.getElementById('advaced_info_button');
+    basic_info_button.onclick = function () {
+
+        basic_information_box.style.display = "block";
+        advanced_information_box.style.display = "none";
+        basic_info_button.style.background = "#c01c25";
+        basic_info_button.style.color = "#fff";
+        advaced_info_button.style.background = "#f2f2f2";
+        advaced_info_button.style.color = "#1c1c1c";
+    };
+    advaced_info_button.onclick = function () {
+        basic_information_box.style.display = "none";
+        advanced_information_box.style.display = "block";
+        advaced_info_button.style.background = "#c01c25";
+        advaced_info_button.style.color = "#fff";
+        basic_info_button.style.background = "#f2f2f2";
+        basic_info_button.style.color = "#1c1c1c";
+    }
+
+    function submit_check(){
+
+        if(document.getElementById('user_name').value == ''){
+            alert('名称不能为空!');
+            $('input[name="user_name"]').focus();
+            return false;
+        }
+        if(document.getElementById('user_passwd').value == ''){
+            alert('口令不能为空!');
+            $('input[name="user_passwd"]').focus();
+            return false;
+        }
+        if(document.getElementById('user_passwd').value != document.getElementById('user_passwd_confirm').value){
+            alert('口令和确认口令不一致!');
+            $('input[name="user_passwd"]').focus();
+            return false;
+        }
+        var hwid_list = '';
+        $("#user_hwid_list").children("option").each(function (){  
+            hwid_list += $(this).text();
+            hwid_list += ',';
+        });
+        hwid_list = hwid_list.substr(0,hwid_list.length - 1);
+        document.getElementById('user_hwid_list2').value = hwid_list;
+        
+        if(isNull(document.getElementById('user_ip').value)){
+
+        } else {
+            if(document.getElementById('user_ip').value.search(/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/) == -1){
+                alert('IP格式错误!');
+                $('#user_ip').focus();
+                return false;
+            }
+        }
+        
+        if(isNull(document.getElementById('user_mail').value)){
+
+        } else {
+            if(document.getElementById('user_mail').value.search(/^[a-z0-9_\-]+(\.[_a-z0-9\-]+)*@([_a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel)$/) == -1){
+                alert('Email格式错误!');
+                $('#user_mail').focus();
+                return false;
+            }
+        }
+        
+        if(isNull(document.getElementById('user_phone').value)){
+
+        } else {
+            if(document.getElementById('user_phone').value.search(/^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$/i) == -1){
+                alert('手机格式错误!');
+                $('#user_phone').focus();
+                return false;
+            }
+        }
+        
+        $.post(
+    		'?s=/index/Layout/userAdd_ajax',
+    		{
+    			"username":document.getElementById('user_name').value,
+    			"usergroup":$("#user_group").combobox('getValue'),
+    			"password":document.getElementById('user_passwd').value,
+    			"description":document.getElementById('user_description').value,
+    			"email":document.getElementById('user_mail').value,
+    			"phone":document.getElementById('user_phone').value,
+    			"hwidlist":hwid_list,
+    			"ip":document.getElementById('user_ip').value
+    		},
+    		function(data){
+    			console.log(data);
+    			if(data == 1){
+    				$('#user_table').datagrid('reload');
+    				closeWindow('user_add');
+    			}else if(data == -1){
+    				alert('获取不到用户名和密码！');
+    				closeWindow('user_add');
+    			}else if(data == -2){
+    				alert('用户名已存在！');
+    				closeWindow('user_add');
+    			}
+    		},
+    		'text'
+    	);
+        
+        return false;
+    }
+    
+    function list_add(insertname, selectname){
+        var insert_val = $('input[name="' + insertname + '"]').val();
+        
+        var insert_status = true;
+        $('select[name="' + selectname + '"]').children("option").each(function (){  
+            if($(this).text() == insert_val){
+                insert_status = false;
+                return false;
+            }
+        });
+        
+        if(insert_status == true){
+            $('select[name="' + selectname + '"]').append('<option value="' + insert_val + '">' + insert_val + '</option>');
+        }
+    }
+    
+    function list_del(selectname){
+        $('select[name="' + selectname + '"] > option:selected').remove();
+    }
+    
+    $(document).ready(function(){
+    	var groupname = document.getElementById('user_father_group_name').value;
+    	
+    	$('#user_group').combobox({
+   			url:'?s=/index/Layout/usergroupJsondata&groupname=' + groupname,
+				valueField:'value', 
+				textField:'text'
+		});
+    });
+    
+    function userExist(obj){
+    	$.post(
+    		'?s=/index/Layout/is_user_exist',
+    		{
+    			username:document.getElementById('user_name').value
+    		},
+    		function(data){
+    			if(data == 1){
+    				$('#user_exist').empty();
+    				$('#user_exist').append('<img src="./public/images/ok.gif"/>');
+    			} else {
+    				$('#user_exist').empty();
+    				$('#user_exist').append('<img src="./public/images/error.gif"/>用户已存在！');
+    			}
+    		},
+    		'text'
+    	);
+    }
+</script>
+
+

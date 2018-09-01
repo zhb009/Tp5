@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>分页显示</title>
+    {include file="index/include" /}
+    <link rel="stylesheet" type="text/css" href="./plugins/Font-Awesome-3.2.1/css/font-awesome.min.css" />
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    {include file="index/header" /}
+    <!-- 表格 -->
+    <table id="access_table"></table>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#access_table').datagrid({
+            fit: true,
+            fitColumns: true,
+            striped: true,
+            nowrap: true,
+            border: false,
+            remoteSort: false,
+            collapsible: true,
+            pagination: true,
+            pagePosition: 'top',
+            pageSize: '20',
+            url: "?s=/index/DataGrid/get_data_ajax",
+            frozenColumns: [
+                [{
+                    field: 'ck',
+                    checkbox: true
+                }]
+            ],
+            columns: [
+                [{
+                    field: 'id',
+                    title: '行号',
+                    align: 'left',
+                    resizable: true,
+                    width: 30,
+                    editor: 'text'
+                }, {
+                    field: 'node',
+                    title: '节点',
+                    align: 'left',
+                    resizable: true,
+                    width: 30,
+                    editor: 'text'
+                }, {
+                    field: 'addr',
+                    title: '用户的IP',
+                    align: 'left',
+                    resizable: true,
+                    width: 70,
+                    editor: 'text'
+                }, {
+                    field: 'post',
+                    title: '用户端口号',
+                    align: 'left',
+                    resizable: true,
+                    width: 30,
+                    editor: 'text'
+                }, {
+                    field: 'referer',
+                    title: '访问来源',
+                    align: 'left',
+                    resizable: true,
+                    width: 200,
+                    editor: 'text'
+                }, {
+                    field: 'agent',
+                    title: '浏览器信息',
+                    align: 'left',
+                    resizable: true,
+                    width: 400,
+                    editor: 'text'
+                }, {
+                    field: 'time',
+                    title: '访问时间',
+                    align: 'left',
+                    resizable: true,
+                    width: 80,
+                    editor: 'text'
+                }]
+            ],
+            loadMsg: '请等待，数据正在加载......',
+            onDblClickRow: function(rowIndex, rowData) {
+                //console.log(rowData.addr);
+                $(document.body).append('<div id="ip_div"></div>');
+                $('#ip_div').dialog({
+                    width: 1200,
+                    height: 220,
+                    closed: false,
+                    modal: true,
+                    title: 'IP Information',
+                    href: "?s=/index/DataGrid/get_ali_ip&ip=" + rowData.addr
+                });
+            }
+        });
+    });
+</script>

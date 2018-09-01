@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>树和表格</title>
+		{include file="index/include" /}
+		
+		<style type="text/css">
+			body{
+				margin: 0;
+				padding:0;
+			}
+		</style>
+		
+	</head>
+	<body class="easyui-layout">
+		<div data-options="region:'north',title:'导航栏',split:true" style="height:100px;">
+			<br/>
+			<a href="?s=/index/Index/index" class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true">首&nbsp;页</a>
+		</div>
+		<div data-options="region:'west',title:'用户组',split:true" style="width:300px;">
+			<div id="user_group_menu" style="background-color:#eee;height:25px;border-bottom:1px solid #ccc">
+                <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onClick="add_group('添加组');">添加</a>
+                <a href="javascript:void(0);" class="easyui-linkbutton" id="group_edit" data-options="iconCls:'icon-edit',plain:true" onClick="modify_group('编辑组');">编辑</a>
+                <a href="javascript:void(0);" class="easyui-linkbutton" id="group_del" data-options="iconCls:'icon-remove',plain:true" onClick="del_group();">删除</a>
+            </div>
+			<div style="width:100%;margin:10px 0;">
+				<ul id="tt1" style="overflow:auto;" class="easyui-tree" data-options="url:'?s=/index/Layout/groupJsondata'"></ul>
+			</div>
+		</div>
+		<div data-options="region:'center',title:'用户'" style="padding:5px;">
+			<div id="tb">
+                <a href="javascript:void(0);" class="easyui-linkbutton" id="useradd" iconCls="icon-add" plain="true" onClick="user_add('添加用户');">添加</a>
+                <a href="javascript:void(0);" class="easyui-linkbutton" id="useredit" iconCls="icon-edit" plain="true" onClick="user_edit('编辑用户');">编辑</a>
+                <a href="javascript:void(0);" class="easyui-linkbutton" id="userdelete" iconCls="icon-remove" plain="true"  onClick="del_user();">删除</a>
+            </div>
+            <!-- 表格 -->
+            <table id="user_table"></table>
+		</div>
+		<input type="hidden" id="user_father_group_name" />
+	</body>
+</html>
+<script type="text/javascript">
+	function setToolBar(){
+        var sel_row = $('#user_table').datagrid('getChecked');
+        
+        if (sel_row.length < 1)
+        {
+            $('#userdelete').linkbutton('disable');
+            $('#useredit').linkbutton('disable');
+        }
+        else if (sel_row.length == 1)
+        {
+            $('#userdelete').linkbutton('enable');
+            $('#useredit').linkbutton('enable');
+        }
+        else if (sel_row.length > 1)
+        {
+            $('#userdelete').linkbutton('enable');
+            $('#useredit').linkbutton('disable');
+        }
+    }
+
+	$(document).ready(function(){
+		$('#user_delete').linkbutton('disable');
+        $('#user_edit').linkbutton('disable');
+		
+		$.post(
+			'?s=/index/Index/is_user_login_ajax',
+			{username:'testUser'},
+			function(data){
+				if(data == -1){
+					if ($('#userloginwindow').length <= 0) {
+				        $(document.body).append('<div id="userloginwindow" style="display:none;"></div>');
+				    }
+					
+					userLoginWindow('userloginwindow', 'layout1_user_login_window');
+				}
+			},
+			'text'
+		);
+		
+		$('#user_table').datagrid({
+            fit: true,
+            fitColumns: true,
+            striped: true,
+            nowrap: true,
+            border: false,
+            remoteSort: false,
+            collapsible: true,
+            url: '?s=/index/Layout/userinfoJsondata',
+            frozenColumns: [[
+                    {field: 'id', checkbox: true}
+                ]],
+            columns: [[
+                    {field: 'userName', title: '账号名称', align: 'left', resizable: true, width: 100, editor: 'text'},
+                    {field: 'userGroup', title: '所属父组', align: 'left', resizable: true, width: 100, editor: 'text'},
+                    {field: 'userDescription', title: '描述', align: 'left', resizable: true, width: 100, editor: 'text'},
+                    {field: 'ip', title: 'IP地址', align: 'left', resizable: true, width: 100, editor: 'text'},
+                    {field: 'hwid', title: '硬件特征码', align: 'left', resizable: true, width: 100, editor: 'text'},
+                ]],
+            loadMsg: '请等待，数据正在加载......',
+            toolbar: '#tb',
+            onCheck: setToolBar,
+            onUncheck: setToolBar,
+            onClickRow: setToolBar,
+            onCheckAll: setToolBar,
+            onUncheckAll: setToolBar,
+            onSelect: setToolBar,
+            onUnselect: setToolBar
+        });
+        
+        $('#tt1').tree({
+		    url:'?s=/index/Layout/groupJsondata',
+		    onClick: function(node){
+				
+				$('#user_table').datagrid({
+		            fit: true,
+		            fitColumns: true,
+		            striped: true,
+		            nowrap: true,
+		            border: false,
+		            remoteSort: false,
+		            collapsible: true,
+		            url: '?s=/index/Layout/userinfoJsondata&groupname=' + node.text,
+		            frozenColumns: [[
+		                    {field: 'id', checkbox: true}
+		                ]],
+		            columns: [[
+		                    {field: 'userName', title: '账号名称', align: 'left', resizable: true, width: 100, editor: 'text'},
+		                    {field: 'userGroup', title: '所属父组', align: 'left', resizable: true, width: 100, editor: 'text'},
+		                    {field: 'userDescription', title: '描述', align: 'left', resizable: true, width: 100, editor: 'text'},
+		                    {field: 'ip', title: 'IP地址', align: 'left', resizable: true, width: 100, editor: 'text'},
+		                    {field: 'hwid', title: '硬件特征码', align: 'left', resizable: true, width: 100, editor: 'text'},
+		                ]],
+		            loadMsg: '请等待，数据正在加载......',
+		            toolbar: '#tb',
+		            onCheck: setToolBar,
+		            onUncheck: setToolBar,
+		            onClickRow: setToolBar,
+		            onCheckAll: setToolBar,
+		            onUncheckAll: setToolBar,
+		            onSelect: setToolBar,
+		            onUnselect: setToolBar
+		        });
+				
+		        $.post(
+            		'?s=/index/Layout/usergroupJsondata',
+            		{groupname:node.text},
+            		function(data){
+            			document.getElementById('user_father_group_name').value = jQuery.parseJSON(data)[0].value;
+            		},
+            		'text'
+            	);
+			}
+		});
+	});
+	
+	function add_group(title) {
+	    if ($('#userGroup_div').length <= 0) {
+	        $(document.body).append('<div id="userGroup_div" style="width:400px;display:none;"></div>');
+	    }
+	    openWindow('userGroup_div', 'index/Layout', 'layout1_group_add_window', title);
+	}
+	
+	function modify_group(title) {
+	    if ($('#userGroup_div').length <= 0) {
+	        $(document.body).append('<div id="userGroup_div" style="width:400px;display:none;"></div>');
+	    }
+	    
+	    if($('#tt1').tree('getSelected') == null){
+	    	alert('请选中一个组节点！');
+	    } else {
+	    	
+	    	if($('#tt1').tree('getSelected').text == 'root'){
+	    		alert('root是根节点不能被编辑。');
+	    	} else {
+	    		$(document.body).append('<input id="tree_node_name" type="hidden" value="' + $('#tt1').tree('getSelected').text + '" />');
+	    		openWindow('userGroup_div', 'index/Layout', 'layout1_group_edit_window', title);		
+	    	}
+	    }
+	}
+	
+	function del_group(){
+		
+		if($('#tt1').tree('getSelected') == null){
+	    	alert('请选中一个组节点！');
+	    } else {
+	    	
+	    	if($('#tt1').tree('getSelected').text == 'root'){
+	    		alert('root是根节点不能被删除！');
+	    	} else {
+	    		var nodetext = $('#tt1').tree('getSelected').text;
+	    		
+	    		if(confirm('是否删除' + nodetext + '节点及其子节点？')){
+					$.post(
+				  		"?s=/index/Layout/groupDel_ajax",
+				  		{
+				  			"group_name": nodetext,
+				  		},
+				  		function(data){
+				  			if(data == 0){
+				  				$('#tt1').tree('reload');
+				  			}
+				  		},
+				  		"json"
+				  	);
+				}		
+	    	}
+	    }
+	}
+	
+	function user_add(title){
+		if ($('#user_add').length <= 0) {
+	        $(document.body).append('<div id="user_add" style="width:600px;display:none;"></div>');
+	    }
+		openWindow('user_add', 'index/Layout', 'layout1_user_add_window', title);
+	}
+	
+</script>
